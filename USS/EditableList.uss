@@ -1,0 +1,53 @@
+.eb-list {
+	border-width: 1px;
+	border-color: #808080;
+	background-color: #E4E5E4;
+	border-radius: 4px;
+}
+
+.eb-list__header {
+	border-color: #808080;
+	border-bottom-width: 1px;
+}
+
+.eb-list__header__text {
+	-unity-text-align: lower-left;
+}
+
+.eb-list__item {
+	align-items: center;
+}
+
+.eb-list__item, .eb-list__header {
+	flex-direction: row;
+	padding: 1px 4px;
+}
+
+.eb-list__item__content, .eb-list__header__text {
+	flex-basis: 1px;
+	flex-grow: 1;
+}
+
+.eb-list__item__remove-button, .eb-list__header__add-button {
+	width: 16px;
+	height: 16px;
+}
+
+.eb-list__item__drag-button {
+	width: 16px;
+	height: 6px;
+}
+
+.eb-image-button {
+	-unity-background-scale-mode: scale-to-fit;
+	padding: 0;
+	margin: 0;
+}
+
+.eb-image-button:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+}
+
+.eb-image-button:active {
+	background-color: rgba(0, 0, 0, 0.1);
+}

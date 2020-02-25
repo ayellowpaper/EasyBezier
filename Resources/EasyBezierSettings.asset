@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e02e4b2458cbe1345be302513d98cf78, type: 3}
+  m_Name: EasyBezierSettings
+  m_EditorClassIdentifier: 
+  Settings:
+    BezierColor: {r: 0, g: 1, b: 0.88, a: 1}
+    ControlPointColor: {r: 0, g: 1, b: 0.88, a: 1}
+    TangentPointColor: {r: 0.31, g: 1, b: 0.023, a: 1}
+    TangentLineColor: {r: 0, g: 1, b: 0.88, a: 1}
+    PathThickness: 1.3
+    HandleSize: 1
+    PointHandleSize: 1
+    TangentHandleSize: 1
+    SelectedHandleSize: 1.3
+    PathScaleGizmoSize: 0.5
+    UpVectorLength: 0.5
+    HideAutoAndLinear: 0
+    UpVectorDisplayMode: 2
+    SceneViewGuiAnchor: 0
+    SceneViewGuiPadding: {x: 5, y: 5}

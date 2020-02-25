@@ -1,0 +1,17 @@
+{
+    "name": "Yellowpaper.EasyBezier.Editor",
+    "references": [
+        "GUID:3d10c17ddc645154eb842e4589dced8c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
