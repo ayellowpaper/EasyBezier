@@ -42,7 +42,7 @@ namespace EasyBezier
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(in_Editor.Component, UndoStrings.Scale);
+                BezierEditorUtility.RecordUndo(in_Editor.Component, UndoStrings.Scale);
                 if (in_SetInTangent)
                     in_Editor.Component.SetInTangentPositionAtIndex(in_Index, m_StartDragPosition + Vector3.Scale(m_InTangentOffset, newScale), m_Space);
                 if (in_SetOutTangent)

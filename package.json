@@ -1,6 +1,6 @@
 {
   "name": "com.yellowpaper.easybezier",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Easy Bezier",
   "description": "A bezier tool that aims to be the easiest to use, while still offering everything you need. Includes mesh generation.",
   "unity": "2019.3",

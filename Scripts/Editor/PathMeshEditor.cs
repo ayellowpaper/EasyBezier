@@ -297,6 +297,7 @@ namespace EasyBezier
                 IntermediateMeshEditor.OnChanged += (x, y) => { OnChanged?.Invoke(this, y); };
                 Content.Add(IntermediateMeshEditor);
                 var enterPercentSlider = new BindingWrapper<float>(new SliderWithField("Enter Percent", 0f, 1f), "m_EnterPercent");
+                enterPercentSlider.Child.SetValueWithoutNotify(in_Property.FindPropertyRelative("m_EnterPercent").floatValue);
                 enterPercentSlider.RegisterValueChangedCallback(EnterPercentChanged);
                 Content.Add(enterPercentSlider);
 
@@ -309,14 +310,14 @@ namespace EasyBezier
 
             private void EnterPercentChanged(ChangeEvent<float> evt)
             {
-                Undo.RecordObject(m_Property.serializedObject.targetObject, "Enter Percent");
+                BezierEditorUtility.RecordUndo(m_Property.serializedObject.targetObject, "Enter Percent");
                 m_Target.EnterPercent = evt.newValue;
                 HandleOnChanged();
             }
 
             private void IsActiveChanged(ChangeEvent<bool> evt)
             {
-                Undo.RecordObject(m_Property.serializedObject.targetObject, "Is Active");
+                BezierEditorUtility.RecordUndo(m_Property.serializedObject.targetObject, "Is Active");
                 m_Target.IsActive = evt.newValue;
                 HandleOnChanged();
             }

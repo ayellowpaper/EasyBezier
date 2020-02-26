@@ -206,7 +206,7 @@ namespace EasyBezier
                 {
                     if (m_Selection.PointType == PointType.Point)
                     {
-                        Undo.RecordObject(Component, UndoStrings.RemovePoint);
+                        BezierEditorUtility.RecordUndo(Component, UndoStrings.RemovePoint);
                         Component.RemovePointAt(m_Selection.Index);
                         SelectPointAtIndex(m_Selection.Index - 1 >= 0 ? m_Selection.Index - 1 : 0, PointType.Point);
                     }
@@ -254,11 +254,12 @@ namespace EasyBezier
 
                 if (m_Event.type == EventType.MouseDown && m_Event.button == 0)
                 {
-                    Undo.RecordObject(Component, UndoStrings.AddPoint);
+                    BezierEditorUtility.RecordUndo(Component, UndoStrings.AddPoint);
                     if (insert)
                         Component.InsertPointAtTime(t);
                     else
                         Component.AddPoint(newPoint);
+                    EditorApplication.QueuePlayerLoopUpdate();
                 }
                 //Handles.FreeMoveHandle(GUIUtility.GetControlID(FocusType.Passive), newPoint, Quaternion.identity, HandleUtility.GetHandleSize(newPoint) * 0.09f, Vector3.one, Handles.DotHandleCap);
             }
@@ -577,7 +578,7 @@ namespace EasyBezier
         {
             ChangeCurveTypeWrapper wrapper = (ChangeCurveTypeWrapper)in_Wrapper;
 
-            Undo.RecordObject(Component, UndoStrings.SetCurveType);
+            BezierEditorUtility.RecordUndo(Component, UndoStrings.SetCurveType);
             switch (wrapper.PointType)
             {
                 case PointType.Point:
@@ -602,14 +603,14 @@ namespace EasyBezier
 
         private void _ContextRemoveAtIndex(object in_Index)
         {
-            Undo.RecordObject(Component, UndoStrings.RemovePoint);
+            BezierEditorUtility.RecordUndo(Component, UndoStrings.RemovePoint);
             Component.RemovePointAt((int) in_Index);
         }
 
         private void _ContextSetConnectionTypeAtIndex(object in_Index)
         {
-            System.Tuple<int, TangentConnectionType, bool> tuple = (System.Tuple<int, TangentConnectionType, bool>)in_Index;
-            Undo.RecordObject(Component, UndoStrings.SetConnectedTangents);
+            Tuple<int, TangentConnectionType, bool> tuple = (Tuple<int, TangentConnectionType, bool>)in_Index;
+            BezierEditorUtility.RecordUndo(Component, UndoStrings.SetConnectedTangents);
             Component.SetTangentConnectionTypeAtIndex(tuple.Item1, tuple.Item2, tuple.Item3);
         }
 

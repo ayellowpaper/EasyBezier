@@ -46,7 +46,7 @@ namespace EasyBezier
                 m_ArcHandle.DrawHandle();
                 if (EditorGUI.EndChangeCheck())
                 {
-                    Undo.RecordObject(in_Editor.Component, UndoStrings.SetRoll);
+                    BezierEditorUtility.RecordUndo(in_Editor.Component, UndoStrings.SetRoll);
                     in_Editor.Component.SetAdjustmentRollAtIndex(in_Index, m_ArcHandle.angle);
                     EditorApplication.QueuePlayerLoopUpdate();
                 }

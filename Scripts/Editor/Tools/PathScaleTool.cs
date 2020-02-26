@@ -48,7 +48,7 @@ namespace EasyBezier
             }
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(in_Editor.Component, UndoStrings.SetScale);
+                BezierEditorUtility.RecordUndo(in_Editor.Component, UndoStrings.SetScale);
                 in_Editor.Component.SetScaleAtIndex(in_Index, new Vector3(newScale, newScale, newScale));
                 EditorApplication.QueuePlayerLoopUpdate();
             }

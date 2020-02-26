@@ -54,7 +54,7 @@ namespace EasyBezier
             bool newLoop = EditorGUILayout.Toggle("Loop", Component.IsLooping);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(Component, UndoStrings.ChangeLoop);
+                BezierEditorUtility.RecordUndo(Component, UndoStrings.ChangeLoop);
                 Component.IsLooping = newLoop;
             }
 
@@ -65,7 +65,7 @@ namespace EasyBezier
             float newRoll = EditorGUILayout.Slider("Curve Roll", Component.PathRoll, -180f, 180f);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(Component, "Curve Roll");
+                BezierEditorUtility.RecordUndo(Component, "Curve Roll");
                 Component.PathRoll = newRoll;
             }
 
@@ -84,7 +84,7 @@ namespace EasyBezier
 
             if (GUILayout.Button("Reset All", GUILayout.Width(80)))
             {
-                Undo.RecordObject(Component, UndoStrings.ResetRoll);
+                BezierEditorUtility.RecordUndo(Component, UndoStrings.ResetRoll);
                 Component.ResetRoll();
             }
             EditorGUILayout.EndHorizontal();
@@ -94,7 +94,7 @@ namespace EasyBezier
             Vector3 newScale = ScaleInputField(Component.PathScale, Component.ScaleInputType);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(Component, UndoStrings.SetScale);
+                BezierEditorUtility.RecordUndo(Component, UndoStrings.SetScale);
                 Component.PathScale = newScale;
             }
 
@@ -102,13 +102,13 @@ namespace EasyBezier
             ScaleInputType newScaleInputType = (ScaleInputType) EditorGUILayout.EnumPopup(Component.ScaleInputType, GUILayout.Width(40));
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(Component, UndoStrings.SetScaleInputType);
+                BezierEditorUtility.RecordUndo(Component, UndoStrings.SetScaleInputType);
                 Component.ScaleInputType = newScaleInputType;
             }
 
             if (GUILayout.Button("Reset All", GUILayout.Width(80)))
             {
-                Undo.RecordObject(Component, UndoStrings.ResetScale);
+                BezierEditorUtility.RecordUndo(Component, UndoStrings.ResetScale);
                 Component.ResetScale();
             }
             EditorGUILayout.EndHorizontal();
@@ -170,7 +170,7 @@ namespace EasyBezier
 
         private void HandleOnAdd(ReorderableList list)
         {
-            Undo.RecordObject(Component, UndoStrings.AddPoint);
+            BezierEditorUtility.RecordUndo(Component, UndoStrings.AddPoint);
             Component.AddPoint();
         }
 
@@ -178,7 +178,7 @@ namespace EasyBezier
         {
             if (Component.PointCount > 2)
             {
-                Undo.RecordObject(Component, UndoStrings.RemovePoint);
+                BezierEditorUtility.RecordUndo(Component, UndoStrings.RemovePoint);
                 Component.RemovePointAt(list.index);
             }
         }
@@ -246,7 +246,7 @@ namespace EasyBezier
             T newValue = in_PropertyFunction();
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(Component, in_UndoString);
+                BezierEditorUtility.RecordUndo(Component, in_UndoString);
                 in_SetterMethod(newValue);
             }
         }
