@@ -48,9 +48,9 @@ namespace EasyBezier
             }
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(in_Editor.Component, UndoStrings.SetScale);
+                Undo.RecordObject(in_Editor.Component, UndoStrings.SetScale);
                 in_Editor.Component.SetScaleAtIndex(in_Index, new Vector3(newScale, newScale, newScale));
-                EditorApplication.QueuePlayerLoopUpdate();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);
             }
             //Handles.CircleHandleCap(-1, pos, Quaternion.LookRotation(forwardDir), scale.x, Event.current.type);
         }

@@ -310,15 +310,17 @@ namespace EasyBezier
 
             private void EnterPercentChanged(ChangeEvent<float> evt)
             {
-                BezierEditorUtility.RecordUndo(m_Property.serializedObject.targetObject, "Enter Percent");
+                Undo.RecordObject(m_Property.serializedObject.targetObject, "Enter Percent");
                 m_Target.EnterPercent = evt.newValue;
+                PrefabUtility.RecordPrefabInstancePropertyModifications(m_Property.serializedObject.targetObject);
                 HandleOnChanged();
             }
 
             private void IsActiveChanged(ChangeEvent<bool> evt)
             {
-                BezierEditorUtility.RecordUndo(m_Property.serializedObject.targetObject, "Is Active");
+                Undo.RecordObject(m_Property.serializedObject.targetObject, "Is Active");
                 m_Target.IsActive = evt.newValue;
+                PrefabUtility.RecordPrefabInstancePropertyModifications(m_Property.serializedObject.targetObject);
                 HandleOnChanged();
             }
 

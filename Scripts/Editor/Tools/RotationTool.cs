@@ -41,12 +41,12 @@ namespace EasyBezier
             if (EditorGUI.EndChangeCheck())
             {
                 Quaternion rotationalDifference = Quaternion.Inverse(in_Editor.ToolRotation) * newRotation;
-                BezierEditorUtility.RecordUndo(in_Editor.Component, UndoStrings.Scale);
+                Undo.RecordObject(in_Editor.Component, UndoStrings.Scale);
                 if (in_SetInTangent)
                     in_Editor.Component.SetInTangentPositionAtIndex(in_Index, m_StartDragPosition + rotationalDifference * m_InTangentOffset);
                 if (in_SetOutTangent)
                     in_Editor.Component.SetOutTangentPositionAtIndex(in_Index, m_StartDragPosition + rotationalDifference * m_OutTangentOffset);
-                EditorApplication.QueuePlayerLoopUpdate();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);
             }
         }
     }

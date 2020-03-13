@@ -42,12 +42,12 @@ namespace EasyBezier
             }
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(in_Editor.Component, UndoStrings.Scale);
+                Undo.RecordObject(in_Editor.Component, UndoStrings.Scale);
                 if (in_SetInTangent)
                     in_Editor.Component.SetInTangentPositionAtIndex(in_Index, m_StartDragPosition + Vector3.Scale(m_InTangentOffset, newScale), m_Space);
                 if (in_SetOutTangent)
                     in_Editor.Component.SetOutTangentPositionAtIndex(in_Index, m_StartDragPosition + Vector3.Scale(m_OutTangentOffset, newScale), m_Space);
-                EditorApplication.QueuePlayerLoopUpdate();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);
             }
         }
     }

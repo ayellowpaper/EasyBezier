@@ -50,9 +50,9 @@ namespace EasyBezier
             posButton = MoreHandles.SelectableMoveHandle(GUIUtility.GetControlID(FocusType.Passive), in_Position, in_Size, in_Fill);
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(in_Editor.target, in_UndoText);
+                Undo.RecordObject(in_Editor.target, in_UndoText);
                 in_Callback(posButton.Position);
-                EditorApplication.QueuePlayerLoopUpdate();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);
             }
 
             return posButton;

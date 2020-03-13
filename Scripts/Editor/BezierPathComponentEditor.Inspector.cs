@@ -54,8 +54,9 @@ namespace EasyBezier
             bool newLoop = EditorGUILayout.Toggle("Loop", Component.IsLooping);
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(Component, UndoStrings.ChangeLoop);
+                Undo.RecordObject(Component, UndoStrings.ChangeLoop);
                 Component.IsLooping = newLoop;
+                PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
             }
 
             EditorGUILayout.BeginHorizontal();
@@ -65,8 +66,9 @@ namespace EasyBezier
             float newRoll = EditorGUILayout.Slider("Curve Roll", Component.PathRoll, -180f, 180f);
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(Component, "Curve Roll");
+                Undo.RecordObject(Component, "Curve Roll");
                 Component.PathRoll = newRoll;
+                PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
             }
 
             // check if we are dragging the slider
@@ -84,8 +86,9 @@ namespace EasyBezier
 
             if (GUILayout.Button("Reset All", GUILayout.Width(80)))
             {
-                BezierEditorUtility.RecordUndo(Component, UndoStrings.ResetRoll);
+                Undo.RecordObject(Component, UndoStrings.ResetRoll);
                 Component.ResetRoll();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
             }
             EditorGUILayout.EndHorizontal();
 
@@ -94,22 +97,25 @@ namespace EasyBezier
             Vector3 newScale = ScaleInputField(Component.PathScale, Component.ScaleInputType);
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(Component, UndoStrings.SetScale);
+                Undo.RecordObject(Component, UndoStrings.SetScale);
                 Component.PathScale = newScale;
+                PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
             }
 
             EditorGUI.BeginChangeCheck();
             ScaleInputType newScaleInputType = (ScaleInputType) EditorGUILayout.EnumPopup(Component.ScaleInputType, GUILayout.Width(40));
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(Component, UndoStrings.SetScaleInputType);
+                Undo.RecordObject(Component, UndoStrings.SetScaleInputType);
                 Component.ScaleInputType = newScaleInputType;
+                PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
             }
 
             if (GUILayout.Button("Reset All", GUILayout.Width(80)))
             {
-                BezierEditorUtility.RecordUndo(Component, UndoStrings.ResetScale);
+                Undo.RecordObject(Component, UndoStrings.ResetScale);
                 Component.ResetScale();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
             }
             EditorGUILayout.EndHorizontal();
 
@@ -170,16 +176,18 @@ namespace EasyBezier
 
         private void HandleOnAdd(ReorderableList list)
         {
-            BezierEditorUtility.RecordUndo(Component, UndoStrings.AddPoint);
+            Undo.RecordObject(Component, UndoStrings.AddPoint);
             Component.AddPoint();
+            PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
         }
 
         private void HandleOnRemove(ReorderableList list)
         {
             if (Component.PointCount > 2)
             {
-                BezierEditorUtility.RecordUndo(Component, UndoStrings.RemovePoint);
+                Undo.RecordObject(Component, UndoStrings.RemovePoint);
                 Component.RemovePointAt(list.index);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
             }
         }
 
@@ -246,8 +254,9 @@ namespace EasyBezier
             T newValue = in_PropertyFunction();
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(Component, in_UndoString);
+                Undo.RecordObject(Component, in_UndoString);
                 in_SetterMethod(newValue);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
             }
         }
 

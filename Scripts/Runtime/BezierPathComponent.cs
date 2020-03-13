@@ -686,8 +686,7 @@ namespace EasyBezier
                 UpdateSmartUpVector();
                 OnPathChanged?.Invoke(this);
 #if UNITY_EDITOR
-                if (!UnityEditor.EditorApplication.isPlaying)
-                    UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
+                UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
 #endif
             }
         }

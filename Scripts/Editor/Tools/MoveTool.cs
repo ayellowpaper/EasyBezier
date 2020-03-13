@@ -15,9 +15,9 @@ namespace EasyBezier
             Vector3 newPosition = Handles.PositionHandle(pos, in_Editor.ToolRotation);
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(in_Editor.Component, UndoStrings.SetInTangentPosition);
+                Undo.RecordObject(in_Editor.Component, UndoStrings.SetInTangentPosition);
                 in_Editor.Component.SetInTangentPositionAtIndex(in_Index, newPosition);
-                EditorApplication.QueuePlayerLoopUpdate();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);
             }
         }
 
@@ -29,9 +29,9 @@ namespace EasyBezier
             Vector3 newPosition = Handles.PositionHandle(pos, in_Editor.ToolRotation);
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(in_Editor.Component, UndoStrings.SetOutTangentPosition);
+                Undo.RecordObject(in_Editor.Component, UndoStrings.SetOutTangentPosition);
                 in_Editor.Component.SetOutTangentPositionAtIndex(in_Index, newPosition);
-                EditorApplication.QueuePlayerLoopUpdate();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);
             }
         }
 
@@ -47,9 +47,9 @@ namespace EasyBezier
             Vector3 newPosition = Handles.PositionHandle(pos, in_Editor.ToolRotation);
             if (EditorGUI.EndChangeCheck())
             {
-                BezierEditorUtility.RecordUndo(in_Editor.Component, UndoStrings.SetPointPosition);
+                Undo.RecordObject(in_Editor.Component, UndoStrings.SetPointPosition);
                 in_Editor.Component.SetPositionAtIndex(in_Index, newPosition);
-                EditorApplication.QueuePlayerLoopUpdate();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);
             }
         }
     }
