@@ -244,8 +244,19 @@ namespace EasyBezier
         {
             BezierPoint point = m_Points[in_Index];
             point.InTangent.CurveType = in_CurveType;
+            UpdateConnectionType(in_Index);
             UpdateAutoAndLinear();
             SetPathChanged(true);
+        }
+
+        internal void UpdateConnectionType(int in_Index)
+        {
+            BezierPoint point = m_Points[in_Index];
+            TangentConnectionType newConnectionType = TangentConnectionType.Broken;
+            if (point.InTangent.CurveType == point.OutTangent.CurveType)
+                newConnectionType = point.InTangent.CurveType.GetPreferredConnectionType(point.ConnectionType);
+
+            SetTangentConnectionTypeAtIndex(in_Index, newConnectionType);
         }
 
         public CurveType GetInTangentCurveTypeAtIndex(int in_Index)
@@ -257,6 +268,7 @@ namespace EasyBezier
         {
             BezierPoint point = m_Points[in_Index];
             point.OutTangent.CurveType = in_CurveType;
+            UpdateConnectionType(in_Index);
             UpdateAutoAndLinear();
             SetPathChanged(true);
         }

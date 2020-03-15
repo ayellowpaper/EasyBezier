@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Linq;
+using System;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using EasyBezier.UIElements;
@@ -78,7 +79,7 @@ namespace EasyBezier
             ui.Query<Button>("eb-selected-point-toolbar__next").First().clicked += delegate { SelectPointAtIndex(m_Selection.Index + 1, m_Selection.PointType); };
 
             m_SelectedPointElement = ui.Query("eb-selected-point").First();
-            m_BezierPointEditor = new BezierPointEditor(serializedObject.FindProperty("m_Points").GetArrayElementAtIndex(m_Selection.Index));
+            m_BezierPointEditor = new BezierPointEditor(Component, m_Selection.Index);
             m_SelectedPointElement.Add(m_BezierPointEditor);
 
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/com.yellowpaper.easybezier/USS/BezierPathComponentEditor.uss");
@@ -92,7 +93,7 @@ namespace EasyBezier
             OnSelectionChanged += delegate {
                 UpdatePointsLabel();
                 m_BezierPointEditor.RemoveFromHierarchy();
-                m_BezierPointEditor = new BezierPointEditor(serializedObject.FindProperty("m_Points").GetArrayElementAtIndex(m_Selection.Index));
+                m_BezierPointEditor = new BezierPointEditor(Component, m_Selection.Index);
                 m_BezierPointEditor.ScaleField.InputType = (VectorInputType)pathScaleInputType.GetSerializedProperty(serializedObject).enumValueIndex;
                 m_SelectedPointElement.Add(m_BezierPointEditor);
             };
@@ -131,29 +132,33 @@ namespace EasyBezier
         {
             public Vector3SwitchableInput ScaleField { get; private set; }
 
-            public BezierPointEditor(SerializedProperty in_Property)
+            private BezierPathComponent m_Component;
+
+            public BezierPointEditor(BezierPathComponent in_Component, int in_Index)
             {
+                m_Component = in_Component;
                 var positionField = new Vector3Field("Position");
-                positionField.BindProperty(in_Property.FindPropertyRelative("Position"));
+                positionField.AddToClassList("eb-vector-field");
+                positionField.BindBackingField(() => m_Component.GetPositionAtIndex(in_Index), x => m_Component.SetPositionAtIndex(in_Index, x), m_Component, UndoStrings.SetPointPosition);
                 Add(positionField);
 
-                var enumField = new EnumField("ConnectionType");
-                enumField.BindProperty(in_Property.FindPropertyRelative("ConnectionType"));
+                var enumField = new EnumField("Connection Type");
+                enumField.BindBackingField(() => m_Component.GetTangentConnectionTypeAtIndex(in_Index), x => m_Component.SetTangentConnectionTypeAtIndex(in_Index, (TangentConnectionType) x), m_Component, UndoStrings.SetConnectedTangents);
                 Add(enumField);
 
-                Add(CreateTangentGUI(in_Property.FindPropertyRelative("InTangent"), "In Tangent"));
-                Add(CreateTangentGUI(in_Property.FindPropertyRelative("OutTangent"), "Out Tangent"));
+                Add(CreateTangentGUI("In Tangent", () => m_Component.GetInTangentPositionAtIndex(in_Index), x => m_Component.SetInTangentPositionAtIndex(in_Index, x), () => m_Component.GetInTangentCurveTypeAtIndex(in_Index), x => m_Component.SetInTangentCurveTypeAtIndex(in_Index, (CurveType)x), UndoStrings.SetInTangentPosition, UndoStrings.SetInTangentCurveType));
+                Add(CreateTangentGUI("Out Tangent", () => m_Component.GetOutTangentPositionAtIndex(in_Index), x => m_Component.SetOutTangentPositionAtIndex(in_Index, x), () => m_Component.GetOutTangentCurveTypeAtIndex(in_Index), x => m_Component.SetOutTangentCurveTypeAtIndex(in_Index, (CurveType)x), UndoStrings.SetOutTangentPosition, UndoStrings.SetOutTangentCurveType));
 
                 var roll = new FloatField("Roll");
-                roll.BindProperty(in_Property.FindPropertyRelative("Roll"));
+                roll.BindBackingField(() => m_Component.GetAdjustmentRollAtIndex(in_Index), x => m_Component.SetAdjustmentRollAtIndex(in_Index, x), m_Component, UndoStrings.SetRoll);
                 Add(roll);
 
                 ScaleField = new Vector3SwitchableInput("Scale");
-                ScaleField.BindProperty(in_Property.FindPropertyRelative("Scale"));
+                ScaleField.BindBackingField(() => m_Component.GetScaleAtIndex(in_Index), x => m_Component.SetScaleAtIndex(in_Index, x), m_Component, UndoStrings.SetScale);
                 Add(ScaleField);
             }
 
-            private VisualElement CreateTangentGUI(SerializedProperty in_TangentProperty, string in_Label)
+            private VisualElement CreateTangentGUI(string in_Label, Func<Vector3> in_PositionGetter, Action<Vector3> in_PositionSetter, Func<Enum> in_CurveTypeGetter, Action<Enum> in_CurveTypeSetter, string in_PositionUndoString, string in_CurveTypeUndoString)
             {
                 VisualElement container = new VisualElement();
                 container.AddToClassList("eb-tangent");
@@ -163,12 +168,13 @@ namespace EasyBezier
                 container.Add(label);
 
                 var positionInput = new Vector3Field();
-                positionInput.BindProperty(in_TangentProperty.FindPropertyRelative("Position"));
+                positionInput.BindBackingField(in_PositionGetter, in_PositionSetter, m_Component, in_PositionUndoString);
                 positionInput.AddToClassList("eb-tangent__position");
+                positionInput.AddToClassList("eb-vector-field");
                 container.Add(positionInput);
 
                 var curveTypeInput = new EnumField();
-                curveTypeInput.BindProperty(in_TangentProperty.FindPropertyRelative("CurveType"));
+                curveTypeInput.BindBackingField(in_CurveTypeGetter, in_CurveTypeSetter, m_Component, in_CurveTypeUndoString);
                 curveTypeInput.AddToClassList("eb-tangent__curve-type");
                 container.Add(curveTypeInput);
                 return container;

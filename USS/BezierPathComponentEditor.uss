@@ -46,6 +46,10 @@
 	margin-top: 5px;
 }
 
+.eb-vector-field FloatInput {
+	flex-basis: 0;
+}
+
 #eb-selected-point-toolbar__label {
 	width: 80px;
 	-unity-font-style: bold;
@@ -64,6 +68,7 @@ BezierPointEditor * {
 
 .eb-tangent {
 	flex-direction: row;
+	margin-left: 3px;
 }
 
 .eb-tangent__position {

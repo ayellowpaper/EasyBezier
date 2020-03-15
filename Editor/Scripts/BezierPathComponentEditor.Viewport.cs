@@ -596,12 +596,6 @@ namespace EasyBezier
                     break;
             }
 
-            BezierPoint bp = Component.Points[wrapper.Index];
-            TangentConnectionType newConnectionType = TangentConnectionType.Broken;
-            if (bp.InTangent.CurveType == bp.OutTangent.CurveType)
-                newConnectionType = bp.InTangent.CurveType.GetPreferredConnectionType(bp.ConnectionType);
-
-            Component.SetTangentConnectionTypeAtIndex(wrapper.Index, newConnectionType);
             PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
         }
 
