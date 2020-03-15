@@ -36,6 +36,15 @@ namespace EasyBezier
             }
         }
 
+        public static Vector3 RoundVector3(Vector3 in_Vector, int in_Digits)
+        {
+            return new Vector3(
+                (float)System.Math.Round(in_Vector.x, in_Digits, System.MidpointRounding.AwayFromZero),
+                (float)System.Math.Round(in_Vector.y, in_Digits, System.MidpointRounding.AwayFromZero),
+                (float)System.Math.Round(in_Vector.z, in_Digits, System.MidpointRounding.AwayFromZero)
+           );
+        }
+
         private static List<IEnumerator> _coroutines = new List<IEnumerator>();
 
         public static void StartEditorCoroutine(IEnumerator coroutine)

@@ -37,11 +37,11 @@ namespace EasyBezier
             }
         }
 
-        public static Vector3 GetScale(Vector3 in_Scale, ScaleInputType in_ScaleInputType)
+        public static Vector3 GetScale(Vector3 in_Scale, VectorInputType in_ScaleInputType)
         {
-            if (in_ScaleInputType == ScaleInputType.Float)
+            if (in_ScaleInputType == VectorInputType.Float)
                 return new Vector3(in_Scale.x, in_Scale.x, in_Scale.x);
-            else if (in_ScaleInputType == ScaleInputType.Vector2)
+            else if (in_ScaleInputType == VectorInputType.Vector2)
                 return new Vector3(in_Scale.x, in_Scale.y, 1f);
 
            return in_Scale;

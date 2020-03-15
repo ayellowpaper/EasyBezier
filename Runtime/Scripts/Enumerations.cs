@@ -11,7 +11,7 @@ namespace EasyBezier
         OutTangent
     }
 
-    public enum ScaleInputType
+    public enum VectorInputType
     {
         Float,
         Vector2,

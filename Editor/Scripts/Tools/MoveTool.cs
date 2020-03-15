@@ -15,6 +15,7 @@ namespace EasyBezier
             Vector3 newPosition = Handles.PositionHandle(pos, in_Editor.ToolRotation);
             if (EditorGUI.EndChangeCheck())
             {
+                newPosition = BezierEditorUtility.RoundVector3(newPosition, 2);
                 Undo.RecordObject(in_Editor.Component, UndoStrings.SetInTangentPosition);
                 in_Editor.Component.SetInTangentPositionAtIndex(in_Index, newPosition);
                 PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);
@@ -29,6 +30,7 @@ namespace EasyBezier
             Vector3 newPosition = Handles.PositionHandle(pos, in_Editor.ToolRotation);
             if (EditorGUI.EndChangeCheck())
             {
+                newPosition = BezierEditorUtility.RoundVector3(newPosition, 2);
                 Undo.RecordObject(in_Editor.Component, UndoStrings.SetOutTangentPosition);
                 in_Editor.Component.SetOutTangentPositionAtIndex(in_Index, newPosition);
                 PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);
@@ -47,6 +49,7 @@ namespace EasyBezier
             Vector3 newPosition = Handles.PositionHandle(pos, in_Editor.ToolRotation);
             if (EditorGUI.EndChangeCheck())
             {
+                newPosition = BezierEditorUtility.RoundVector3(newPosition, 2);
                 Undo.RecordObject(in_Editor.Component, UndoStrings.SetPointPosition);
                 in_Editor.Component.SetPositionAtIndex(in_Index, newPosition);
                 PrefabUtility.RecordPrefabInstancePropertyModifications(in_Editor.Component);

@@ -19,13 +19,11 @@ namespace EasyBezier
         [SerializeField]
         private Vector3 m_PathScale = Vector3.one;
         [SerializeField]
-        private ScaleInputType m_ScaleInputType = ScaleInputType.Float;
+        private VectorInputType m_ScaleInputType = VectorInputType.Float;
         [SerializeField]
         private List<BezierPoint> m_Points = new List<BezierPoint>(new BezierPoint[] { new BezierPoint(Vector3.zero), new BezierPoint(Vector3.right) });
 
         public bool PathChanged { get; private set; }
-        public delegate void OnPathChangedDelegate(BezierPathComponent in_Sender);
-        public event OnPathChangedDelegate OnPathChanged;
 
         private bool m_IsLengthDirty = true;
         private float m_Length = -1f;
@@ -46,6 +44,15 @@ namespace EasyBezier
             if (PathChanged)
                 SetPathChanged(false);
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            Debug.Log("validate");
+            SetPathChanged(true);
+            UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
+        }
+#endif
 
         private void OnDrawGizmos()
         {
@@ -670,10 +677,6 @@ namespace EasyBezier
         internal void SetPathMetadataChanged(bool in_Value)
         {
             PathChanged = in_Value;
-            if (PathChanged == true)
-            {
-                OnPathChanged?.Invoke(this);
-            }
         }
 
         public void SetPathChanged(bool in_Value)
@@ -684,7 +687,6 @@ namespace EasyBezier
                 m_IsLengthDirty = true;
                 m_AreCachedWorldPositionsDirty = true;
                 UpdateSmartUpVector();
-                OnPathChanged?.Invoke(this);
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
 #endif
@@ -722,7 +724,7 @@ namespace EasyBezier
             }
         }
 
-        public ScaleInputType ScaleInputType {
+        public VectorInputType ScaleInputType {
             get {
                 return m_ScaleInputType;
             }

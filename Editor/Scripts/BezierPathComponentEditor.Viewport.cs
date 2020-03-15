@@ -48,6 +48,8 @@ namespace EasyBezier
 
         internal Dictionary<Tool, ManipulationTool> m_ToolMappings;
 
+        public event Action<BezierPathComponentEditor, bool> OnIsEditingChanged;
+
         class ToolContent
         {
             public ManipulationTool Tool;
@@ -187,7 +189,7 @@ namespace EasyBezier
             if (m_Event.type == EventType.KeyDown && m_Event.keyCode == KeyCode.Tab)
             {
                 m_Event.Use();
-                m_IsEditing = !m_IsEditing;
+                IsEditing = !IsEditing;
             }
 
             DrawSceneViewGUI();
@@ -309,7 +311,7 @@ namespace EasyBezier
 
             Rect currentRect = new Rect(0, 0, 30, 24f);
 
-            m_IsEditing = EditorGUI.Toggle(currentRect, m_IsEditing, (GUIStyle)"button");
+            IsEditing = EditorGUI.Toggle(currentRect, IsEditing, (GUIStyle)"button");
             GUI.DrawTexture(currentRect, EditorGUIUtility.FindTexture("Prefab Icon"), ScaleMode.ScaleToFit);
 
             if (m_IsEditing)
@@ -626,6 +628,17 @@ namespace EasyBezier
         public bool IsSelected(int in_Index, PointType in_PointType)
         {
             return m_Selection.Index == in_Index && m_Selection.PointType == in_PointType;
+        }
+
+        public bool IsEditing {
+            get => m_IsEditing;
+            set {
+                if (m_IsEditing != value)
+                {
+                    m_IsEditing = value;
+                    OnIsEditingChanged?.Invoke(this, m_IsEditing);
+                }
+            }
         }
 
         public Quaternion ToolRotation {

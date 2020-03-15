@@ -1,13 +1,14 @@
 .eb-list {
 	border-width: 1px;
-	border-color: #808080;
-	background-color: #E4E5E4;
+	border-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.03);
 	border-radius: 4px;
 }
 
 .eb-list__header {
-	border-color: #808080;
+	border-color: rgba(0, 0, 0, 0.4);
 	border-bottom-width: 1px;
+	background-color: rgba(0, 0, 0, 0.07);
 }
 
 .eb-list__header__text {

@@ -8,6 +8,22 @@ namespace EasyBezier
 {
     public class ConstrainedFloatField : FloatField
     {
+        public new class UxmlFactory : UxmlFactory<ConstrainedFloatField, UxmlTraits> { }
+
+        public new class UxmlTraits : FloatField.UxmlTraits
+        {
+            UxmlFloatAttributeDescription m_LowValue = new UxmlFloatAttributeDescription { name = "low-value" };
+            UxmlFloatAttributeDescription m_HighValue = new UxmlFloatAttributeDescription { name = "high-value", defaultValue = 10f };
+
+            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+            {
+                var constrainedFloatField = (ConstrainedFloatField)ve;
+                base.Init(ve, bag, cc);
+                constrainedFloatField.MinValue = m_LowValue.GetValueFromBag(bag, cc);
+                constrainedFloatField.MaxValue = m_HighValue.GetValueFromBag(bag, cc);
+            }
+        }
+
         private float m_MinValue;
         private float m_MaxValue;
 

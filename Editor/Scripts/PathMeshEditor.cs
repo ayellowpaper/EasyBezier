@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System;
-using System.Linq;
+using EasyBezier.UIElements;
 
 namespace EasyBezier
 {
@@ -94,7 +94,7 @@ namespace EasyBezier
             m_Root.Add(endMeshEditor);
 
             m_Root.Add(materialSetupEditor);
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/com.yellowpaper.easybezier/USS/PathMeshRenderer.uss");
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/com.yellowpaper.easybezier/USS/PathMeshEditor.uss");
             m_Root.styleSheets.Add(styleSheet);
 
             return m_Root;

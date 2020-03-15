@@ -11,7 +11,7 @@ namespace EasyBezier
         public override void DoInTangent(BezierPathComponentEditor in_Editor, int in_Index)
         {
             bool fill = in_Editor.Component.GetInTangentCurveTypeAtIndex(in_Index) != CurveType.Free;
-            MoreHandles.PositionButton posButton = DrawSinglePoint(in_Editor, in_Editor.Component.GetInTangentPositionAtIndex(in_Index), GetSelectionSize(in_Editor, in_Index, PointType.InTangent) * EasyBezierSettings.Instance.GetTangentHandleSize(), fill, (pos) => { in_Editor.Component.SetInTangentPositionAtIndex(in_Index, pos); }, UndoStrings.SetInTangentPosition);
+            MoreHandles.PositionButton posButton = DrawSinglePoint(in_Editor, in_Editor.Component.GetInTangentPositionAtIndex(in_Index), GetSelectionSize(in_Editor, in_Index, PointType.InTangent) * EasyBezierSettings.Instance.GetTangentHandleSize(), fill, (pos) => { in_Editor.Component.SetInTangentPositionAtIndex(in_Index, BezierEditorUtility.RoundVector3(pos, 2)); }, UndoStrings.SetInTangentPosition);
             if (posButton.WasClicked)
                 in_Editor.SelectPointAtIndex(in_Index, PointType.InTangent);
             if (posButton.IsHovering)
@@ -21,7 +21,7 @@ namespace EasyBezier
         public override void DoOutTangent(BezierPathComponentEditor in_Editor, int in_Index)
         {
             bool fill = in_Editor.Component.GetOutTangentCurveTypeAtIndex(in_Index) != CurveType.Free;
-            MoreHandles.PositionButton posButton = DrawSinglePoint(in_Editor, in_Editor.Component.GetOutTangentPositionAtIndex(in_Index), GetSelectionSize(in_Editor, in_Index, PointType.OutTangent) * EasyBezierSettings.Instance.GetTangentHandleSize(), fill, (pos) => { in_Editor.Component.SetOutTangentPositionAtIndex(in_Index, pos); }, UndoStrings.SetOutTangentPosition);
+            MoreHandles.PositionButton posButton = DrawSinglePoint(in_Editor, in_Editor.Component.GetOutTangentPositionAtIndex(in_Index), GetSelectionSize(in_Editor, in_Index, PointType.OutTangent) * EasyBezierSettings.Instance.GetTangentHandleSize(), fill, (pos) => { in_Editor.Component.SetOutTangentPositionAtIndex(in_Index, BezierEditorUtility.RoundVector3(pos, 2)); }, UndoStrings.SetOutTangentPosition);
             if (posButton.WasClicked)
                 in_Editor.SelectPointAtIndex(in_Index, PointType.OutTangent);
             if (posButton.IsHovering)
@@ -30,7 +30,7 @@ namespace EasyBezier
 
         public override void DoPoint(BezierPathComponentEditor in_Editor, int in_Index)
         {
-            MoreHandles.PositionButton posButton = DrawSinglePoint(in_Editor, in_Editor.Component.GetPositionAtIndex(in_Index), GetSelectionSize(in_Editor, in_Index, PointType.Point) * EasyBezierSettings.Instance.GetPointHandleSize(), true, (pos) => { in_Editor.Component.SetPositionAtIndex(in_Index, pos); }, UndoStrings.SetPointPosition);
+            MoreHandles.PositionButton posButton = DrawSinglePoint(in_Editor, in_Editor.Component.GetPositionAtIndex(in_Index), GetSelectionSize(in_Editor, in_Index, PointType.Point) * EasyBezierSettings.Instance.GetPointHandleSize(), true, (pos) => { in_Editor.Component.SetPositionAtIndex(in_Index, BezierEditorUtility.RoundVector3(pos, 2)); }, UndoStrings.SetPointPosition);
             if (posButton.WasClicked)
                 in_Editor.SelectPointAtIndex(in_Index, PointType.Point);
             if (posButton.IsHovering)
