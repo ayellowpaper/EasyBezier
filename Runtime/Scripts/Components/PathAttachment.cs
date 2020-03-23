@@ -14,8 +14,9 @@ namespace EasyBezier
         [Range(0f, 1f)]
         public float AttachedTime = 0f;
         public bool CopyRotation = false;
+        public Vector3 AdditionalRotation = Vector3.zero;
         public bool CopyScale = false;
-        public Vector3 ScaleAdjustment = Vector3.one;
+        public Vector3 AdditionalScale = Vector3.one;
 
         private void Update()
         {
@@ -24,9 +25,9 @@ namespace EasyBezier
                 float time = AttachmentType == MeasurementUnit.Distance ? PathComponent.DistanceToTime(AttachedDistance) : AttachedTime;
                 transform.position = PathComponent.GetPositionAtTime(time);
                 if (CopyRotation)
-                    transform.rotation = PathComponent.GetRotationAtTime(time);
+                    transform.rotation = PathComponent.GetRotationAtTime(time) * Quaternion.Euler(AdditionalRotation);
                 if (CopyScale)
-                    transform.localScale = Vector3.Scale(PathComponent.GetScaleAtTime(time), ScaleAdjustment);
+                    transform.localScale = Vector3.Scale(PathComponent.GetScaleAtTime(time), AdditionalScale);
             }
         }
     }

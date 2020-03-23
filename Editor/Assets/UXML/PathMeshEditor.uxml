@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xmlns:easybezier="EasyBezier.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
+>
+  
+  <editor:PropertyField name="is-looping" label="Is Looping" binding-path="m_IsLooping" />
+  <engine:VisualElement name="path-roll-container">
+    <easybezier:SliderWithField name="path-roll" label="Path Roll" low-value="-180" high-value="180" binding-path="m_PathRoll"/>
+    <engine:Button name="reset-path-roll" text="Reset All"/>
+  </engine:VisualElement>
+
+  <engine:VisualElement name="path-scale-container">
+    <easybezier:Vector3SwitchableInput name="path-scale" label="Path Scale" binding-path="m_PathScale" input-type="Vector3"/>
+    <editor:EnumField name="path-scale-input-type" binding-path="m_ScaleInputType"/>
+    <engine:Button name="reset-path-scale" text="Reset All"/>
+  </engine:VisualElement>
+
+  <engine:VisualElement class="eb-container" name="eb-selected-point">
+    <editor:Toolbar name="eb-selected-point-header" class="eb-container__header">
+      <editor:ToolbarButton name="eb-selected-point-header__prev" class="eb-container__header__button left-button"/>
+      <engine:Label name="eb-selected-point-header__label" text="Point 1/20" class="eb-container__header__label"/>
+      <editor:ToolbarButton name="eb-selected-point-header__next" class="eb-container__header__button right-button"/>
+    </editor:Toolbar>
+  </engine:VisualElement>
+
+</engine:UXML>

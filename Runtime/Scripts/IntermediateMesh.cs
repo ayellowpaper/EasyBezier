@@ -23,7 +23,7 @@ namespace EasyBezier
             set {
                 m_Mesh = value;
                 IsIntermediateMeshDataDirty = true;
-                CheckIndices();
+                CheckSubmeshIndices();
             }
         }
         public bool FlipMesh { get => m_FlipMesh; set { m_FlipMesh = value; IsIntermediateMeshDataDirty = true; } }
@@ -41,7 +41,7 @@ namespace EasyBezier
         private List<List<Vector2>> m_UVs = new List<List<Vector2>>(8);
         private List<List<int>> m_Triangles = new List<List<int>>();
 
-        public void SetDirty()
+        internal void SetDirty()
         {
             IsIntermediateMeshDataDirty = true;
         }
@@ -54,7 +54,7 @@ namespace EasyBezier
             m_Triangles.Clear();
         }
 
-        public void CheckIndices()
+        public void CheckSubmeshIndices()
         {
             if (m_Mesh == null)
                 m_RemappedSubmeshIndices = new int[] { 0 };

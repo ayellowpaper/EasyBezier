@@ -1,0 +1,62 @@
+﻿.eb-container {
+	margin-top: 2px;
+	border-color: rgba(153, 153, 153, 255);
+	border-width: 1px 1px 1px 1px;
+}
+
+.eb-container__content {
+	padding: 2px 0px;
+}
+
+.eb-container__header {
+	flex-direction: row;
+	border-width: 0px 0px 2px 0px;
+	height: 24px;
+}
+
+.eb-container__header > Foldout {
+	flex-shrink: 0;
+	flex-grow: 1;
+	justify-content: center;
+}
+
+.eb-container__header > Foldout:hover {
+	background-color: #c1c1c1;
+}
+
+.eb-container__header > Foldout Label {
+	margin: 0px;
+	font-size: 13px;
+	-unity-font-style: bold;
+}
+
+.eb-container__header > Foldout > Toggle {
+	margin: 0px;
+}
+
+.eb-container__header__button {
+	border-width: 0px;
+	border-radius: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.left-button, .right-button {
+	width: 20px;
+	-unity-background-scale-mode: scale-to-fit;
+}
+
+.left-button {
+	background-image: resource("EB-ArrowLeft");
+}
+
+.right-button {
+	background-image: resource("EB-ArrowRight");
+}
+
+.eb-seperator {
+	height: 1px;
+	flex-grow: 1;
+	background-color: rgba(153, 153, 153, 255);
+	margin: 2px 6px;
+}

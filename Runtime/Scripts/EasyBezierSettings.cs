@@ -5,6 +5,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Yellowpaper.EasyBezier.Editor")]
+
 namespace EasyBezier
 {
     /// <summary>
@@ -29,6 +31,11 @@ namespace EasyBezier
         }
 
 #if UNITY_EDITOR
+        public const string PackagePath = "Packages/com.yellowpaper.easybezier";
+        public const string EditorAssetsPath = PackagePath + "/Editor/Assets";
+        public const string EditorUXMLPath = EditorAssetsPath + "/UXML";
+        public const string EditorUSSPath = EditorAssetsPath + "/USS";
+
         public static SerializedObject GetSerializedObject()
         {
             return new SerializedObject(Instance);

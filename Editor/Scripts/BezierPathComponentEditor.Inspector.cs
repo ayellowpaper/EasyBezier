@@ -50,7 +50,7 @@ namespace EasyBezier
 
             root.Add(imgui);
 
-            var template = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.yellowpaper.easybezier/UXML/BezierPathComponentEditor.uxml");
+            var template = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(EasyBezierSettings.EditorUXMLPath + "/BezierPathComponentEditor.uxml");
             VisualElement ui = template.CloneTree();
             root.Add(ui);
 
@@ -72,18 +72,19 @@ namespace EasyBezier
                 PrefabUtility.RecordPrefabInstancePropertyModifications(Component);
             };
 
-            m_PointsLabel = ui.Query<Label>("eb-selected-point-toolbar__label").First();
+            m_PointsLabel = ui.Query<Label>("eb-selected-point-header__label").First();
             UpdatePointsLabel();
 
-            ui.Query<Button>("eb-selected-point-toolbar__prev").First().clicked += delegate { SelectPointAtIndex(m_Selection.Index - 1, m_Selection.PointType); };
-            ui.Query<Button>("eb-selected-point-toolbar__next").First().clicked += delegate { SelectPointAtIndex(m_Selection.Index + 1, m_Selection.PointType); };
+            ui.Query<Button>("eb-selected-point-header__prev").First().clicked += delegate { SelectPointAtIndex(m_Selection.Index - 1, m_Selection.PointType); };
+            ui.Query<Button>("eb-selected-point-header__next").First().clicked += delegate { SelectPointAtIndex(m_Selection.Index + 1, m_Selection.PointType); };
 
-            m_SelectedPointElement = ui.Query("eb-selected-point").First();
+            m_SelectedPointElement = ui.Q("eb-selected-point");
             m_BezierPointEditor = new BezierPointEditor(Component, m_Selection.Index);
+            m_BezierPointEditor.AddToClassList("eb-container__content");
             m_SelectedPointElement.Add(m_BezierPointEditor);
 
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/com.yellowpaper.easybezier/USS/BezierPathComponentEditor.uss");
-            root.styleSheets.Add(styleSheet);
+            root.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(EasyBezierSettings.EditorUSSPath + "/General.uss"));
+            root.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(EasyBezierSettings.EditorUSSPath + "/BezierPathComponentEditor.uss"));
 
             VectorInputType scaleInputType = (VectorInputType)pathScaleInputType.GetSerializedProperty(serializedObject).enumValueIndex;
             pathScale.InputType = scaleInputType;

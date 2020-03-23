@@ -10,6 +10,11 @@ namespace EasyBezier
 {
     public static class UIElementsExtensions
     {
+        public static DisplayStyle FromBool(bool in_ShouldDisplay)
+        {
+            return in_ShouldDisplay ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
         public static SerializedProperty GetSerializedProperty(this IBindable in_Bindable, SerializedObject in_SerializedObject)
         {
             return in_SerializedObject.FindProperty(in_Bindable.bindingPath);

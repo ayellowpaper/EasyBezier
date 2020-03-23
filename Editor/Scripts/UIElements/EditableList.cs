@@ -87,7 +87,7 @@ namespace EasyBezier
 
             this.Add(m_ListContent);
             this.AddToClassList(UssClassName);
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/com.yellowpaper.easybezier/USS/EditableList.uss");
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(EasyBezierSettings.EditorUSSPath + "/EditableList.uss");
             this.styleSheets.Add(styleSheet);
         }
 

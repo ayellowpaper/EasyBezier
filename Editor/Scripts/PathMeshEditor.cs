@@ -35,22 +35,16 @@ namespace EasyBezier
 
             //var curveMeshField = new PropertyField(serializedObject.FindProperty("m_PathMeshData"));
             //curveMeshField.RegisterCallback<ChangeEvent<object>>(IntermediateMeshChangedCallback);
-            var pathMeshField = new CustomIntermediateMeshEditor(serializedObject.FindProperty("m_PathMeshData"));
+            var pathMeshField = new IntermediateMeshElement(serializedObject.FindProperty("m_PathMeshData"));
             pathMeshField.OnChanged += IntermediateMeshChangedCallback;
 
             var startMeshProperty = serializedObject.FindProperty("m_StartMeshData");
-            var startMeshEditor = new CustomCapMeshEditor("Use Start Mesh", startMeshProperty);
+            var startMeshEditor = new CapMeshElement(startMeshProperty);
             startMeshEditor.OnChanged += IntermediateMeshChangedCallback;
 
             var endMeshProperty = serializedObject.FindProperty("m_EndMeshData");
-            var endMeshEditor = new CustomCapMeshEditor("Use End Mesh", endMeshProperty);
+            var endMeshEditor = new CapMeshElement(endMeshProperty);
             endMeshEditor.OnChanged += IntermediateMeshChangedCallback;
-
-            var generatedMeshField = new ObjectField("GeneratedMesh");
-            generatedMeshField.objectType = typeof(Mesh);
-            generatedMeshField.value = m_MeshFilter.sharedMesh;
-            generatedMeshField.SetEnabled(false);
-            //generatedMeshField.SetEnabled(false);
 
             var fittingType = new PropertyField(serializedObject.FindProperty("FittingType"));
             fittingType.RegisterCallback<ChangeEvent<string>>(x => { UpdateFittingTypeFields(m_Component.FittingType); m_Component.GenerateMesh(); });
@@ -73,29 +67,35 @@ namespace EasyBezier
 
             var startMeshDropdowns = new SubmeshesDropdowns(materialSetupEditor.SubmeshNames, materialSetupEditor.SubmeshIndices, serializedObject.FindProperty("m_StartMeshData").FindPropertyRelative("m_IntermediateMesh").FindPropertyRelative("m_RemappedSubmeshIndices"));
             startMeshDropdowns.OnAnyDropdownChanged += delegate { m_Component.StartMeshData.IntermediateMesh.SetDirty(); m_Component.GenerateMesh(); };
-            startMeshEditor.Content.Add(startMeshDropdowns);
-            startMeshEditor.IntermediateMeshEditor.OnMeshChanged += delegate { startMeshDropdowns.ValidateDropdowns(); };
+            startMeshEditor.Add(startMeshDropdowns);
+            startMeshEditor.IntermediateMeshElement.OnMeshChanged += delegate { startMeshDropdowns.ValidateDropdowns(); };
 
             var endMeshDropdowns = new SubmeshesDropdowns(materialSetupEditor.SubmeshNames, materialSetupEditor.SubmeshIndices, serializedObject.FindProperty("m_EndMeshData").FindPropertyRelative("m_IntermediateMesh").FindPropertyRelative("m_RemappedSubmeshIndices"));
             endMeshDropdowns.OnAnyDropdownChanged += delegate { m_Component.EndMeshData.IntermediateMesh.SetDirty(); m_Component.GenerateMesh(); };
-            endMeshEditor.Content.Add(endMeshDropdowns);
-            endMeshEditor.IntermediateMeshEditor.OnMeshChanged += delegate { endMeshDropdowns.ValidateDropdowns(); };
+            endMeshEditor.Add(endMeshDropdowns);
+            endMeshEditor.IntermediateMeshElement.OnMeshChanged += delegate { endMeshDropdowns.ValidateDropdowns(); };
 
             materialSetupEditor.OnSubmeshesChanged += delegate { pathMeshDropdowns.ValidateDropdowns(); startMeshDropdowns.ValidateDropdowns(); endMeshDropdowns.ValidateDropdowns(); };
 
-            m_Root.Add(pathMeshField);
-            m_Root.Add(fittingType);
-            m_Root.Add(m_MeshFittingElement);
-            m_Root.Add(m_CountElement);
-            m_Root.Add(pathMeshDropdowns);
-            m_Root.Add(generatedMeshField);
+            var foldoutContainer = new FoldoutContainer("Path");
+            m_Root.Add(foldoutContainer);
 
-            m_Root.Add(startMeshEditor);
-            m_Root.Add(endMeshEditor);
+            var seperator = new VisualElement();
+            seperator.AddToClassList("eb-seperator");
 
-            m_Root.Add(materialSetupEditor);
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/com.yellowpaper.easybezier/USS/PathMeshEditor.uss");
-            m_Root.styleSheets.Add(styleSheet);
+            foldoutContainer.Content.Add(pathMeshField);
+            foldoutContainer.Content.Add(seperator);
+            foldoutContainer.Content.Add(fittingType);
+            foldoutContainer.Content.Add(m_MeshFittingElement);
+            foldoutContainer.Content.Add(m_CountElement);
+            foldoutContainer.Content.Add(pathMeshDropdowns);
+
+            m_Root.Add(new FoldoutContainer("Start", startMeshEditor));
+            m_Root.Add(new FoldoutContainer("End", endMeshEditor));
+
+            m_Root.Add(new FoldoutContainer("Materials", materialSetupEditor));
+            m_Root.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(EasyBezierSettings.EditorUSSPath + "/General.uss"));
+            m_Root.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(EasyBezierSettings.EditorUSSPath + "/PathMeshEditor.uss"));
 
             return m_Root;
         }
@@ -257,121 +257,6 @@ namespace EasyBezier
                 }
 
                 CreateDropdowns();
-            }
-        }
-
-        public class CustomCapMeshEditor : VisualElement
-        {
-            SerializedProperty m_Property;
-            VisualElement m_Header;
-            PathMesh.CapMesh m_Target;
-
-            public VisualElement Content { get; private set; }
-
-            public CustomIntermediateMeshEditor IntermediateMeshEditor { get; private set; }
-
-            public event EventHandler OnChanged;
-
-            public CustomCapMeshEditor(string in_Name, SerializedProperty in_Property)
-            {
-                m_Property = in_Property;
-                m_Header = new VisualElement();
-                Content = new VisualElement();
-
-                m_Target = in_Property.GetObject<PathMesh.CapMesh>();
-
-                var isActiveProp = in_Property.FindPropertyRelative("m_IsActive");
-                var toggle = new PropertyField(isActiveProp, in_Name);
-                toggle.RegisterCallback<ChangeEvent<bool>>(evt => { Content.SetEnabled(evt.newValue); IsActiveChanged(evt); });
-                Content.SetEnabled(isActiveProp.boolValue);
-
-                Foldout foldout = new Foldout();
-                foldout.value = BezierEditorUtility.Booleans[in_Property.propertyPath];
-                foldout.RegisterValueChangedCallback(x => { BezierEditorUtility.Booleans[in_Property.propertyPath] = x.newValue; ShowContent(x.newValue); });
-                ShowContent(foldout.value);
-
-                m_Header.Add(foldout);
-                m_Header.Add(toggle);
-
-                IntermediateMeshEditor = new CustomIntermediateMeshEditor(in_Property.FindPropertyRelative("m_IntermediateMesh"));
-                IntermediateMeshEditor.OnChanged += (x, y) => { OnChanged?.Invoke(this, y); };
-                Content.Add(IntermediateMeshEditor);
-                var enterPercentSlider = new BindingWrapper<float>(new SliderWithField("Enter Percent", 0f, 1f), "m_EnterPercent");
-                enterPercentSlider.Child.SetValueWithoutNotify(in_Property.FindPropertyRelative("m_EnterPercent").floatValue);
-                enterPercentSlider.RegisterValueChangedCallback(EnterPercentChanged);
-                Content.Add(enterPercentSlider);
-
-                AddToClassList("use-mesh");
-                m_Header.AddToClassList("use-mesh-header");
-                Content.AddToClassList("use-mesh-content");
-                Add(m_Header);
-                Add(Content);
-            }
-
-            private void EnterPercentChanged(ChangeEvent<float> evt)
-            {
-                Undo.RecordObject(m_Property.serializedObject.targetObject, "Enter Percent");
-                m_Target.EnterPercent = evt.newValue;
-                PrefabUtility.RecordPrefabInstancePropertyModifications(m_Property.serializedObject.targetObject);
-                HandleOnChanged();
-            }
-
-            private void IsActiveChanged(ChangeEvent<bool> evt)
-            {
-                Undo.RecordObject(m_Property.serializedObject.targetObject, "Is Active");
-                m_Target.IsActive = evt.newValue;
-                PrefabUtility.RecordPrefabInstancePropertyModifications(m_Property.serializedObject.targetObject);
-                HandleOnChanged();
-            }
-
-            private void ShowContent(bool in_Show)
-            {
-                Content.style.display = in_Show == true ? DisplayStyle.Flex : DisplayStyle.None;
-            }
-
-            private void HandleOnChanged()
-            {
-                OnChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
-        public class CustomIntermediateMeshEditor : VisualElement
-        {
-            private IntermediateMesh m_Target;
-            private SerializedProperty m_Property;
-
-            public event EventHandler OnChanged;
-            public event EventHandler OnMeshChanged;
-
-            public CustomIntermediateMeshEditor(SerializedProperty in_Property) : base()
-            {
-                m_Property = in_Property;
-                m_Target = in_Property.GetObject<IntermediateMesh>();
-
-                var originalMeshField = new ObjectField("Mesh");
-                originalMeshField.objectType = typeof(Mesh);
-                var meshProp = in_Property.FindPropertyRelative("m_Mesh");
-                originalMeshField.value = meshProp.objectReferenceValue;
-                originalMeshField.RegisterValueChangedCallback((x) => { meshProp.objectReferenceValue = x.newValue; m_Property.serializedObject.ApplyModifiedProperties(); m_Target.CheckIndices(); m_Property.serializedObject.UpdateIfRequiredOrScript(); FieldChanged(); OnMeshChanged?.Invoke(this, null); });
-
-                var axisField = new PropertyField(in_Property.FindPropertyRelative("m_ForwardAxis"));
-                axisField.RegisterCallback<ChangeEvent<string>>(x => { FieldChanged(); });
-
-                var flipAxisField = new PropertyField(in_Property.FindPropertyRelative("m_FlipMesh"));
-                flipAxisField.RegisterCallback<ChangeEvent<bool>>(delegate { FieldChanged(); });
-
-                var container = new VisualElement();
-                container.Add(axisField);
-                container.Add(flipAxisField);
-
-                Add(originalMeshField);
-                Add(container);
-            }
-
-            private void FieldChanged()
-            {
-                m_Target.SetDirty();
-                OnChanged?.Invoke(this, new EventArgs());
             }
         }
     }

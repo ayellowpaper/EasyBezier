@@ -10,7 +10,7 @@ namespace EasyBezier
 {
     public static class CustomBackingFieldBindingExtensions
     {
-        public static void BindBackingField<T>(this BaseField<T> in_BoundElement, Func<T> in_Getter, Action<T> in_Setter, UnityEngine.Object in_UndoObject = null, string in_UndoString = null)
+        public static void BindBackingField<T>(this BaseField<T> in_BoundElement, Func<T> in_Getter, Action<T> in_Setter, UnityEngine.Object in_UndoObject = null, string in_UndoString = "Inspector")
         {
             in_BoundElement.binding = new CustomBackingFieldBinding<T>(in_BoundElement, in_Getter, in_Setter, in_UndoObject, in_UndoString);
         }
@@ -27,7 +27,7 @@ namespace EasyBezier
 
         private T m_PreviousValue;
 
-        public CustomBackingFieldBinding(BaseField<T> in_BoundElement, Func<T> in_Getter, Action<T> in_Setter, UnityEngine.Object in_UndoObject = null, string in_UndoString = null)
+        public CustomBackingFieldBinding(BaseField<T> in_BoundElement, Func<T> in_Getter, Action<T> in_Setter, UnityEngine.Object in_UndoObject = null, string in_UndoString = "Inspector")
         {
             m_BoundElement = in_BoundElement;
             m_Getter = in_Getter;

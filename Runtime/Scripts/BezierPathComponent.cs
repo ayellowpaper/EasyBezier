@@ -48,7 +48,6 @@ namespace EasyBezier
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            Debug.Log("validate");
             SetPathChanged(true);
             UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
         }
@@ -425,6 +424,7 @@ namespace EasyBezier
             return GetScaleAtTime(DistanceToTime(in_Distance));
         }
 
+        // TODO: Otimize this!
         public Matrix4x4 GetMatrixAtTime(float in_T, Space in_Space = DefaultSpace)
         {
             return Matrix4x4.TRS(

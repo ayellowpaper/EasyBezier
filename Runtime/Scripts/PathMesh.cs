@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace EasyBezier
@@ -61,6 +63,9 @@ namespace EasyBezier
 
         private void OnEnable()
         {
+            PrefabUtility.prefabInstanceUpdated -= PrefabInstanceUpdated;
+            PrefabUtility.prefabInstanceUpdated += PrefabInstanceUpdated;
+
             m_BezierPathComponent = GetComponent<BezierPathComponent>();
 
             m_MeshRenderer = GetComponent<MeshRenderer>();
@@ -80,6 +85,16 @@ namespace EasyBezier
         {
             if (m_MeshRenderer != null)
                 m_MeshRenderer.enabled = false;
+        }
+
+        private void PrefabInstanceUpdated(GameObject instance)
+        {
+            if (instance == this.gameObject)
+            {
+                m_StartMeshData.IntermediateMesh.SetDirty();
+                m_EndMeshData.IntermediateMesh.SetDirty();
+                m_PathMeshData.SetDirty();
+            }
         }
 
         public void GenerateMesh()

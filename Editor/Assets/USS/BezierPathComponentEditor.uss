@@ -1,0 +1,45 @@
+#path-roll-container, #path-scale-container {
+	flex-direction: row;
+}
+
+#path-roll, #path-scale {
+	flex-grow: 1;
+}
+
+#path-scale-input-type {
+	flex-shrink: 1;
+	min-width: 20px;
+}
+
+.eb-vector-field FloatInput {
+	flex-basis: 0;
+}
+
+#eb-selected-point-header {
+	justify-content: center;
+}
+
+#eb-selected-point-header__label {
+	width: 80px;
+	-unity-font-style: bold;
+	font-size: 13px;
+	-unity-text-align: middle-center;
+}
+
+BezierPointEditor * {
+	-unity-font-style: normal;
+}
+
+.eb-tangent {
+	flex-direction: row;
+	margin-left: 3px;
+}
+
+.eb-tangent__position {
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+
+.eb-tangent__curve-type {
+	width: 60px;
+}
