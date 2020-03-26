@@ -5,7 +5,7 @@
 }
 
 .eb-container__content {
-	padding: 2px 0px;
+	padding: 2px 0px 2px 8px;
 }
 
 .eb-container__header {

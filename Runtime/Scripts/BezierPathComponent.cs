@@ -75,6 +75,14 @@ namespace EasyBezier
             }
         }
 
+        public void SetCurveType(CurveType in_CurveType)
+        {
+            for (int i = 0; i < m_Points.Count; i++)
+            {
+                SetCurveTypeAtIndex(i, in_CurveType);
+            }
+        }
+
         #region POINTS METHODS
         public Vector3 GetTangentAtIndex(int in_Index, Space in_Space = DefaultSpace)
         {
@@ -237,6 +245,16 @@ namespace EasyBezier
         {
             Vector3 point = m_Points[in_Index].OutTangent.Position;
             return in_Space == Space.World ? transform.TransformPoint(point) : point;
+        }
+
+        public void SetCurveTypeAtIndex(int in_Index, CurveType in_CurveType)
+        {
+            BezierPoint point = m_Points[in_Index];
+            point.InTangent.CurveType = in_CurveType;
+            point.OutTangent.CurveType = in_CurveType;
+            UpdateConnectionType(in_Index);
+            UpdateAutoAndLinear();
+            SetPathChanged(true);
         }
 
         public void SetInTangentCurveTypeAtIndex(int in_Index, CurveType in_CurveType)

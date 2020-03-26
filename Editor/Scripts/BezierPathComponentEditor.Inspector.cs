@@ -23,7 +23,7 @@ namespace EasyBezier
         private BezierPointEditor m_BezierPointEditor;
         private Label m_PointsLabel;
 
-        public event System.Action<BezierPathComponentEditor> OnSelectionChanged;
+        public event Action<BezierPathComponentEditor> OnSelectionChanged;
 
         void OnEnableInspector()
         {
@@ -98,6 +98,15 @@ namespace EasyBezier
                 m_BezierPointEditor.ScaleField.InputType = (VectorInputType)pathScaleInputType.GetSerializedProperty(serializedObject).enumValueIndex;
                 m_SelectedPointElement.Add(m_BezierPointEditor);
             };
+
+            Action straightenAction = delegate { BezierEditorUtility.RecordUndo(Component, () => Component.SetCurveType(CurveType.Linear), "Straighten Curve"); };
+            Action autoSmoothAction = delegate { BezierEditorUtility.RecordUndo(Component, () => Component.SetCurveType(CurveType.Auto), "Smooth Curve"); };
+
+            var straightenButton = new Button(straightenAction) { text = "Straighten" };
+            root.Add(straightenButton);
+
+            var autoSmoothButton = new Button(autoSmoothAction) { text = "Auto Smooth" };
+            root.Add(autoSmoothButton);
 
             return root;
         }

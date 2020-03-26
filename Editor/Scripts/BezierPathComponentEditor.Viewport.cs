@@ -585,8 +585,7 @@ namespace EasyBezier
             switch (wrapper.PointType)
             {
                 case PointType.Point:
-                    Component.SetInTangentCurveTypeAtIndex(wrapper.Index, wrapper.CurveType);
-                    Component.SetOutTangentCurveTypeAtIndex(wrapper.Index, wrapper.CurveType);
+                    Component.SetCurveTypeAtIndex(wrapper.Index, wrapper.CurveType);
                     break;
                 case PointType.InTangent:
                     Component.SetInTangentCurveTypeAtIndex(wrapper.Index, wrapper.CurveType);

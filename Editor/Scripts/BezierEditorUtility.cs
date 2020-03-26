@@ -80,10 +80,11 @@ namespace EasyBezier
             return (T)obj;
         }
 
-        //public static void RecordUndo(Object in_Target, string in_Name)
-        //{
-        //    Undo.RecordObject(in_Target, in_Name);
-        //    PrefabUtility.RecordPrefabInstancePropertyModifications(in_Target);
-        //}
+        public static void RecordUndo(Object in_Target, System.Action in_Callback, string in_UndoString = "Inspector")
+        {
+            Undo.RecordObject(in_Target, in_UndoString);
+            in_Callback?.Invoke();
+            PrefabUtility.RecordPrefabInstancePropertyModifications(in_Target);
+        }
     }
 }
